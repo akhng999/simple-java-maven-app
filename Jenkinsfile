@@ -6,7 +6,7 @@ pipeline {
         }
     }
     stages {
-        stage ('Build') {
+        stage ('Building jar') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
             }
@@ -22,13 +22,16 @@ pipeline {
             }
 
         } 
-        stage ('Deliver') {
+        stage ('Building image') {
+            steps {
+                def dockerImage = docker.build("mvnjavaapp/latest")
+            }
+        }
+        stage ('Deploy Image') {
             steps {
                 //sh './jenkins/scripts/deliver.sh'
-                sh 'docker build -t mvnjavaapp .'
-                sh 'docker run -p 8081:8080 mvnjavaapp'
-
-            }
+                dockerImage.withRun('-p 8081:8080')
+           }
         }
     }
 } 
