@@ -1,7 +1,4 @@
 pipeline {
-    environment {
-        dockerImage = ''
-    }
     agent {
         docker {
             image 'maven:3.8.1-adoptopenjdk-11'
@@ -25,19 +22,9 @@ pipeline {
             }
 
         } 
-        stage ('Building image') {
+        stage ('Deliver') {
             steps {
-                script {
-                     def dockerImage = docker.build("mvnjavaapp/latest")
-                }
-            }
-        }
-        stage ('Deploy Image') {
-            steps {
-                //sh './jenkins/scripts/deliver.sh'
-                script {
-                    dockerImage.withRun('-p 8081:8080')
-                }
+                sh './jenkins/scripts/deliver.sh'
            }
         }
     }
