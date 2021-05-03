@@ -24,7 +24,10 @@ pipeline {
         } 
         stage ('Deliver') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                //sh './jenkins/scripts/deliver.sh'
+                sh 'docker build -t mvnjavaapp .'
+                sh 'docker run -p 8081:8080 mvnjavaapp'
+
             }
         }
     }
